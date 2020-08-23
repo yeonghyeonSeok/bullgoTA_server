@@ -5,5 +5,6 @@ var router = express.Router();
 
 router.use("/list", require("./list/index"));
 router.use("/product", require("./product/index"));
+router.use("/notification", require("./notification/index"));
 
 module.exports = router;

@@ -10,5 +10,8 @@ module.exports = {
     FAIL_SELECT_MARKER : "마커 조회 실패",
 
     EXIST_MODEL : "존재하는 모델명입니다.",
-    NOT_EXIST_MODEL : "존재하지 않는 모델명입니다."
+    NOT_EXIST_MODEL : "존재하지 않는 모델명입니다.",
+
+    SUCCESS_INSERT_PUSH : "푸시 알림 설정 성공",
+    FAIL_INSERT_PUSH : "푸시 알림 설정 실패"
 };
