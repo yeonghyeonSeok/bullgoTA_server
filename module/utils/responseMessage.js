@@ -7,5 +7,8 @@ module.exports = {
     FAIL_INSERT_MARKER : "마커 추가 실패",
 
     SUCCESS_SELECT_MARKER : "마커 조회 성공",
-    FAIL_SELECT_MARKER : "마커 조회 실패"
+    FAIL_SELECT_MARKER : "마커 조회 실패",
+
+    EXIST_MODEL : "존재하는 모델명입니다.",
+    NOT_EXIST_MODEL : "존재하지 않는 모델명입니다."
 };

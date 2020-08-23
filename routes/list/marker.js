@@ -33,13 +33,29 @@ router.post('/', async (req, res) => {
 });
 
 /*
-마커 조회
+마커 전체 조회
 METHOD       : GET
-URL          : /list/marker
+URL          : /list/marker or /list/marker
 */
 router.get('/', async (req, res) => {
     const selectMarkerQuery = 'SELECT * FROM marker'
     const selectMarkerResult = await db.queryParam_None(selectMarkerQuery);
+    if(!selectMarkerResult) {
+        res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_SELECT_MARKER));
+    } else {
+        res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.SUCCESS_SELECT_MARKER, selectMarkerResult));
+    }
+});
+
+/*
+특정 마커 조회
+METHOD       : GET
+URL          : /list/marker?model={모델명}
+*/
+
+router.get('/', async (req, res) => {
+    const selectMarkerQuery = 'SELECT * FROM marker WHERE model = ?'
+    const selectMarkerResult = await db.queryParam_Parse(selectMarkerQuery, req.query.model);
     if(!selectMarkerResult) {
         res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_SELECT_MARKER));
     } else {
