@@ -1,14 +1,10 @@
 var express = require('express');
 var router = express.Router();
 
-const crypto = require('crypto-promise');
-
 const defaultRes = require('../../module/utils/utils');
 const statusCode = require('../../module/utils/statusCode');
 const resMessage = require('../../module/utils/responseMessage');
 const db = require('../../module/pool');
-
-const jwtUtils = require('../../module/jwt');
 
 /*
 마커 추가
@@ -22,7 +18,7 @@ BODY         : model = 모델명
 */
 
 router.post('/', async (req, res) => {
-    const insertMarkerQuery = 'INSERT INTO marker (model, battery, time, latitude, longitude) VALUES (?, ?, ?, ?, ?)'
+    const insertMarkerQuery = 'INSERT INTO model (modelNum, battery, time, latitude, longitude) VALUES (?, ?, ?, ?, ?)'
     const insertMarkerResult = await db.queryParam_Arr(insertMarkerQuery, [req.body.model, req.body.battery, req.body.time, req.body.latitude, req.body.longitude]);
 
     if(!insertMarkerResult) {
@@ -33,12 +29,12 @@ router.post('/', async (req, res) => {
 });
 
 /*
-마커 전체 조회
+이용가능한 마커 조회
 METHOD       : GET
-URL          : /list/marker or /list/marker
+URL          : /list/marker
 */
 router.get('/', async (req, res) => {
-    const selectMarkerQuery = 'SELECT * FROM marker'
+    const selectMarkerQuery = 'SELECT * FROM model WHERE lendStatus = 0'
     const selectMarkerResult = await db.queryParam_None(selectMarkerQuery);
     if(!selectMarkerResult) {
         res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_SELECT_MARKER));
@@ -54,7 +50,7 @@ URL          : /list/marker?model={모델명}
 */
 
 router.get('/', async (req, res) => {
-    const selectMarkerQuery = 'SELECT * FROM marker WHERE model = ?'
+    const selectMarkerQuery = 'SELECT * FROM model WHERE modelNum = ?'
     const selectMarkerResult = await db.queryParam_Parse(selectMarkerQuery, req.query.model);
     if(!selectMarkerResult) {
         res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_SELECT_MARKER));

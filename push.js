@@ -3,6 +3,8 @@ var router = express.Router();
 var FCM = require('fcm-push');
 var fcmInfo = require("../../config/fcm_serverkey.json");
 
+const crypto = require('crypto-promise');
+
 const defaultRes = require('../../module/utils/utils');
 const statusCode = require('../../module/utils/statusCode');
 const resMessage = require('../../module/utils/responseMessage')
@@ -23,19 +25,16 @@ router.post('/', async (req, res) => {
     var serverKey = fcmInfo.fcmServerKey;
     var fcm = new FCM(serverKey);
 
-    var deviceToken = req.body.deviceToken;
-    var timer = (req.body.timer)*1000; 
-
     var message = {
-        to: deviceToken,
+        to: 'cCzlxjbBTfuq6nfue02V4Q:APA91bEwyM5tuD5e1Oe-M27jAKfaQr6EhCqrFJq7uHR6H3n6evX6UX1Rm8ctkBOKksjqXAoJbZy4Ali0wniqZGKkwnliSRzQ6ea4M4RnWBzihilstr42CaZW28I1oVIEWCSrxNY15o-8',
         priority: 'high',
         data: {
-            title: "타이머",
-            message: "성공"
+            title: "father",
+            message: "Goodnight"
         }
     };
 
-    console.log(message.to);
+    //var timer = req.body.timer;    
 
     if (!insertPushResult) {
         res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_INSERT_PUSH));
@@ -48,7 +47,7 @@ router.post('/', async (req, res) => {
             .catch(function(error) {
                 console.log('보내기 실패:' + error);
             });
-        },timer)
+        },10000)
         res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.SUCCESS_INSERT_PUSH));
     }
 });
