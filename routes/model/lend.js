@@ -12,12 +12,12 @@ const db = require('../../module/pool');
 /*
 킥보드 대여
 METHOD       : PUT
-URL          : /model/lend
-BODY         : modelNum = {모델번호}
+URL          : /model/lend/:modelNum
+PARAMS         : modelNum = {모델번호}
 */
-router.put('/', async (req, res) => {
+router.put('/:modelNum', async (req, res) => {
     const selectModelQuery = 'SELECT * FROM model WHERE modelNum = ?'
-    const selectModelResult = await db.queryParam_Arr(selectModelQuery, [req.body.modelNum]);
+    const selectModelResult = await db.queryParam_Arr(selectModelQuery, [req.params.modelNum]);
     
     console.log(selectModelResult);
     if(!selectModelResult){  
@@ -26,19 +26,17 @@ router.put('/', async (req, res) => {
         const lendStatus = selectModelResult[0].lendStatus;
         const lendTime = moment().format("YYYY-MM-DD HH:mm");
 
-        console.log(lendTime);
-
         if(lendStatus == 0) {
             const putLendQuery = 'UPDATE model SET lendStatus = ?, lendTime = ? WHERE modelNum = ?';
-            const putLendResult = await db.queryParam_Arr(putLendQuery, [1, lendTime, req.body.modelNum]);
+            const putLendResult = await db.queryParam_Arr(putLendQuery, [1, lendTime, req.params.modelNum]);
             
             if(!putLendResult) {
                 res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_LEND_MODEL)); // 대여 실패
             } else {
-                res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.SUCCESS_LEND_MODEL));    // 대여 성공
+                res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.SUCCESS_LEND_MODEL, lendTime));    // 대여 성공
             }
         } else {
-            res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.ALREADY_LEND_MODEL));    // 이미 대여중인 모델
+            res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.ALREADY_LEND_MODEL));    // 이미 대여중인 모델
         }
     }
 });

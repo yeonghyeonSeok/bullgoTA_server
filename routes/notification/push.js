@@ -30,8 +30,8 @@ router.post('/', async (req, res) => {
         to: deviceToken,
         priority: 'high',
         data: {
-            title: "타이머",
-            message: "성공"
+            title: "불고타 알람 도착",
+            message: "이제 다시 불어보세요!"
         }
     };
 

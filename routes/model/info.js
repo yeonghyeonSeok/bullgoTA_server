@@ -13,9 +13,9 @@ const { NULL_VALUE } = require('../../module/utils/responseMessage');
 METHOD       : GET
 URL          : /model/info/{제품번호}
 */
-router.get('/:model', async (req, res) => {
+router.get('/:modelNum', async (req, res) => {
     const selectModelQuery = 'SELECT * FROM model WHERE modelNum = ?'
-    const selectModelResult = await db.queryParam_Parse(selectModelQuery, req.params.model);
+    const selectModelResult = await db.queryParam_Arr(selectModelQuery, [req.params.modelNum]);
     console.log(selectModelResult);
 
     if(!selectModelResult) {
