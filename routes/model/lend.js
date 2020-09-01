@@ -24,16 +24,24 @@ router.put('/:modelNum', async (req, res) => {
         res.status(200).send(defaultRes.successFalse(statusCode.DB_ERROR, resMessage.DB_ERROR));  // DB 에러
     } else{  
         const lendStatus = selectModelResult[0].lendStatus;
-        const lendTime = moment().format("YYYY-MM-DD HH:mm");
+        const time = moment().format("YYYY-MM-DD HH:mm");
 
         if(lendStatus == 0) {
             const putLendQuery = 'UPDATE model SET lendStatus = ?, lendTime = ? WHERE modelNum = ?';
-            const putLendResult = await db.queryParam_Arr(putLendQuery, [1, lendTime, req.params.modelNum]);
+            const putLendResult = await db.queryParam_Arr(putLendQuery, [1, time, req.params.modelNum]);
+
+            
+            var data = {
+                lendTime: '',
+                password: ''
+            }
+            data.lendTime = time;
+            data.password = selectModelResult[0].password;
             
             if(!putLendResult) {
                 res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_LEND_MODEL)); // 대여 실패
             } else {
-                res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.SUCCESS_LEND_MODEL, lendTime));    // 대여 성공
+                res.status(200).send(defaultRes.successTrue(statusCode.OK, resMessage.SUCCESS_LEND_MODEL, data));    // 대여 성공
             }
         } else {
             res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.ALREADY_LEND_MODEL));    // 이미 대여중인 모델

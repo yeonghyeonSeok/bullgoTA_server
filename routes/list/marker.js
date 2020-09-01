@@ -18,8 +18,8 @@ BODY         : model = 모델명
 */
 
 router.post('/', async (req, res) => {
-    const insertMarkerQuery = 'INSERT INTO model (modelNum, battery, time, latitude, longitude) VALUES (?, ?, ?, ?, ?)'
-    const insertMarkerResult = await db.queryParam_Arr(insertMarkerQuery, [req.body.model, req.body.battery, req.body.time, req.body.latitude, req.body.longitude]);
+    const insertMarkerQuery = 'INSERT INTO model (modelNum, battery, time, latitude, longitude, lendStatus, password) VALUES (?, ?, ?, ?, ?)'
+    const insertMarkerResult = await db.queryParam_Arr(insertMarkerQuery, [req.body.model, req.body.battery, req.body.time, req.body.latitude, req.body.longitude, 0, req.body.password]);
 
     if(!insertMarkerResult) {
         res.status(200).send(defaultRes.successFalse(statusCode.OK, resMessage.FAIL_INSERT_MARKER));
